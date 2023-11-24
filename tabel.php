@@ -44,7 +44,6 @@ $result = $conn->query($sql);
             margin: 20px;
         }
         body {
-            background-image: url('img/Pangasan.jpg'); /* Ganti 'background.jpg' dengan path gambar latar belakang yang diinginkan */
             background-size: cover;
             color: #000;
         }
@@ -174,7 +173,24 @@ $result = $conn->query($sql);
           {
             name: "Jumlah Penduduk",
             data: [
-              33514,32110,51231,72255,103192,131005,59004,53113,86163,67555,105612,71888,53628,36559,37320,31131,
+              33514,
+32110,
+51231,
+72255,
+103192,
+100524,
+131005,
+59004,
+53113,
+86163,
+67555,
+105612,
+71888,
+53628,
+36559,
+37320,
+31131,
+
             ],
           },
         ],
