@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Leaflet Map</title>
+    <!-- CSS Bootstrap -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+      integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+    />
+    <!-- Search CSS Library -->
+    <link
+      rel="stylesheet"
+      href="assets/plugins/leaflet-search/leaflet-search.css"
+    />
+
+    <!-- Geolocation CSS Library for Plugin -->
+    <link
+      rel="stylesheet"
+      href="https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-locatecontrol/v0.43.0/L.Control.Locate.css"
+    />
+
+    <!-- Leaflet Mouse Position CSS Library -->
+    <link
+      rel="stylesheet"
+      href="assets/plugins/leaflet-mouseposition/L.Control.MousePosition.css"
+    />
+
+    <!-- Leaflet Measure CSS Library -->
+    <link
+      rel="stylesheet"
+      href="assets/plugins/leaflet-measure/leaflet-measure.css"
+    />
+
+    <!-- EasyPrint CSS Library -->
+    <link
+      rel="stylesheet"
+      href="assets/plugins/leaflet-easyprint/easyPrint.css"
+    />
+    <!-- Marker Cluster -->
+    <link
+      rel="stylesheet"
+      href="assets/plugins/leaflet-markercluster/MarkerCluster.css"
+    />
+    <link
+      rel="stylesheet"
+      href="assets/plugins/leaflet-markercluster/MarkerCluster.Default.css"
+    />
+    <!--Routing-->
+    <link
+      rel="stylesheet"
+      href="assets/plugins/leaflet-routing/leaflet-routing-machine.css"
+    />
+    <style>
+      #map {
+        height: 90.6vh;
+      }
+      *.info {
+        padding: 6px 8px;
+        font: 14px/16px Arial, Helvetica, sans-serif;
+        background: white;
+        background: rgba(255, 255, 255, 0.8);
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        border-radius: 5px;
+        text-align: center;
+      }
+      .info h2 {
+        margin: 0 0 5px;
+        color: #777;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Navbar -->
+    <nav
+      class="navbar navbar-expand-lg navbar-light shadow-sm"
+      style="background-color: #ffc800"
+    >
+      <div class="container-fluid">
+        <a class="navbar-brand" href="index.html"
+          ><i class="fa-solid fa-earth-asia"></i> Infografis Kabupaten Sleman</a
+        >
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Menu -->
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="index.html"
+                >Home</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                href="#"
+                aria-disabled="true"
+                data-bs-toggle="modal"
+                data-bs-target="#infoModal"
+                ><i class="fa-solid fa-circle-info"></i
+              ></a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Modal -->
+    <div
+      class="modal fade"
+      id="infoModal"
+      tabindex="-1"
+      aria-labelledby="infoModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">
+              <i class="fa-solid fa-circle-info"></i> Info
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <p>
+              Sumber data :
+              <a href="https://slemankab.bps.go.id/" target="_blank"
+                >https://slemankab.bps.go.id/</a
+              >
+            </p>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Tutup
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Inisialisasi Peta -->
+    <div id="map"></div>
+
+    <!-- Bootstrap JS -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+      crossorigin="anonymous"
+    ></script>
+    <!-- apexcharts JS -->
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.42.0/apexcharts.min.js"
+      integrity="sha512-HctQcT5hnI/elQck4950pvd50RuDnjCSGSoHI8CNyQIYVxsUoyJ+gSQIOrll4oM/Z7Kfi7WCLMIbJbiwYHFCpA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
+    <!-- Search JavaScript Library -->
+    <script src="assets/plugins/leaflet-search/leaflet-search.js"></script>
+
+    <!-- Geolocation Javascript Library -->
+    <script src="https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-locatecontrol/v0.43.0/L.Control.Locate.min.js"></script>
+
+    <!-- Leaflet Mouse Position JavaScript Library -->
+    <script src="assets/plugins/leaflet-mouseposition/L.Control.MousePosition.js"></script>
+
+    <!-- Leaflet Measure JavaScript Library -->
+    <script src="assets/plugins/leaflet-measure/leaflet-measure.js"></script>
+
+    <!-- EasyPrint JavaScript Library -->
+    <script src="assets/plugins/leaflet-easyprint/leaflet.easyPrint.js"></script>
+
+    <!-- Marker Cluster -->
+    <script src="assets/plugins/leaflet-markercluster/leaflet.markercluster.js"></script>
+    <script src="assets/plugins/leaflet-markercluster/leaflet.markercluster-src.js"></script>
+
+    <!--Routing-->
+    <script src="assets/plugins/leaflet-routing/leaflet-routing-machine.js"></script>
+    <script src="assets/plugins/leaflet-routing/leaflet-routing-machine.min.js"></script>
+
+    <script>
+      var wfsgeoserver1 = L.geoJson(null, {
+        style: function (feature) {
+          // Adjust this function to define styles based on your polygon properties
+          var value = feature.properties.jumlah; // Change this to your actual property name
+          return {
+            fillColor: getColor(value),
+            weight: 2,
+            opacity: 1,
+            color: "white",
+            dashArray: "3",
+            fillOpacity: 0.7,
+          };
+        },
+        pointToLayer: function (feature, latlng) {
+          return L.marker(latlng, {});
+        },
+        onEachFeature: function (feature, layer) {
+          var content =
+            "kecamatan: " +
+            feature.properties.kecamatan +
+            "<br>" +
+            "Jumlah Penduduk: " +
+            feature.properties.jumlah +
+            "<br>";
+
+          layer.on({
+            click: function (e) {
+              wfsgeoserver1.bindPopup(content).openPopup();
+            },
+            mouseover: function (e) {
+              wfsgeoserver1
+                .bindTooltip(feature.properties.kecamatan)
+                .openTooltip();
+            },
+            mouseout: function (e) {
+              wfsgeoserver1.closePopup();
+              wfsgeoserver1.closeTooltip();
+            },
+          });
+        },
+      });
+
+      $.getJSON("wfsgeoserver1.php", function (data) {
+        wfsgeoserver1.addData(data);
+        wfsgeoserver1.addTo(map);
+        map.fitBounds(wfsgeoserver1.getBounds());
+      });
+      // Inisialisasi Peta
+      var map = L.map("map").setView([-7.7956, 110.3695], 10);
+      // Legenda
+      L.Control.Legend = L.Control.extend({
+        onAdd: function (map) {
+          var img = L.DomUtil.create("img");
+          img.src = "assets/legend/legend.png";
+          img.style.width = "150px";
+          return img;
+        },
+      });
+      L.control.Legend = function (opts) {
+        return new L.Control.Legend(opts);
+      };
+
+      L.control.Legend({ position: "bottomleft" }).addTo(map);
+
+      // Watermark
+      L.Control.Watermark = L.Control.extend({
+        onAdd: function (map) {
+          var img = L.DomUtil.create("img");
+          img.src = "assets/logo/logosig.png";
+          img.style.width = "120px";
+          return img;
+        },
+      });
+      L.control.watermark = function (opts) {
+        return new L.Control.Watermark(opts);
+      };
+
+      L.control.watermark({ position: "topright" }).addTo(map);
+
+      // Basemap
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        maxZoom: 19,
+        attribution:
+          'Map data ©️ <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      }).addTo(map);
+
+      var basemap1 = L.tileLayer(
+        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        {
+          attribution:
+            '<a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> | <a href="DIVSIGUGM" target="_blank">DIVSIG UGM</a>',
+        }
+      );
+
+      var basemap2 = L.tileLayer(
+        "https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}",
+        {
+          attribution:
+            'Tiles &copy; Esri | <a href="Latihan WebGIS" target="_blank">DIVSIG UGM</a>',
+        }
+      );
+
+      var basemap3 = L.tileLayer(
+        "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+        {
+          attribution:
+            'Tiles &copy; Esri | <a href="Lathan WebGIS" target="_blank">DIVSIG UGM</a>',
+        }
+      );
+
+      var basemap4 = L.tileLayer(
+        "https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png",
+        {
+          attribution:
+            '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors',
+        }
+      );
+
+      basemap4.addTo(map);
+
+      var baseMaps = {
+        OpenStreetMap: basemap1,
+        "Esri World Street": basemap2,
+        "Esri Imagery": basemap3,
+        "Stadia Dark Mode": basemap4,
+      };
+
+      L.control.layers(baseMaps).addTo(map);
+
+      // Plugin Search
+      var searchControl = new L.Control.Search({
+        position: "topleft",
+        layer: wfsgeoserver1, //Nama variabel layer
+        propertyName: "kecamatan", //Field untuk pencarian
+        marker: false,
+        moveToLocation: function (latlng, title, map) {
+          var zoom = map.getBoundsZoom(latlng.layer.getBounds());
+          map.setView(latlng, zoom);
+        },
+      });
+      searchControl
+        .on("search:locationfound", function (e) {
+          e.layer.setStyle({
+            fillColor: "#ffff00",
+            color: "#0000ff",
+          });
+        })
+        .on("search:collapse", function (e) {
+          featuresLayer.eachLayer(function (layer) {
+            featuresLayer.resetStyle(layer);
+          });
+        });
+      map.addControl(searchControl);
+
+      /*Plugin Geolocation */
+      var locateControl = L.control
+        .locate({
+          position: "topleft",
+          drawCircle: true,
+          follow: true,
+          setView: true,
+          keepCurrentZoomLevel: false,
+          markerStyle: {
+            weight: 1,
+            opacity: 0.8,
+            fillOpacity: 0.8,
+          },
+          circleStyle: {
+            weight: 1,
+            clickable: false,
+          },
+          icon: "fas fa-crosshairs",
+          metric: true,
+          strings: {
+            title: "Click for Your Location",
+            popup: "You're here. Accuracy {distance} {unit}",
+            outsideMapBoundsMsg: "Not available",
+          },
+          locateOptions: {
+            maxZoom: 16,
+            watch: true,
+            enableHighAccuracy: true,
+            maximumAge: 10000,
+            timeout: 10000,
+          },
+        })
+        .addTo(map);
+
+      /*Plugin Mouse Position Coordinate */
+      L.control
+        .mousePosition({
+          position: "bottomright",
+          separator: ",",
+          prefix: "Point Coordinate: ",
+        })
+        .addTo(map);
+
+      /*Plugin Measurement Tool */
+      var measureControl = new L.Control.Measure({
+        position: "topleft",
+        primaryLengthUnit: "meters",
+        secondaryLengthUnit: "kilometers",
+        primaryAreaUnit: "hectares",
+        secondaryAreaUnit: "sqmeters",
+        activeColor: "#FF0000",
+        completedColor: "#00FF00",
+      });
+      measureControl.addTo(map);
+
+      /*Plugin EasyPrint */
+      L.easyPrint({
+        title: "Print",
+      }).addTo(map);
+
+      var markers = L.markerClusterGroup();
+
+      for (var i = 0; i < addressPoints.length; i++) {
+        var a = addressPoints[i];
+        var title1 = a[2];
+        var marker = L.marker(new L.LatLng(a[0], a[1]), { title: title1 });
+
+        marker.bindPopup(title1);
+        markers.addLayer(marker);
+      }
+
+      map.addLayer(markers);
+
+      function getColor(value) {
+        return value > 75000
+          ? "#FF0000"
+          : value > 50000
+          ? "#FF702B"
+          : value > 10
+          ? "#FFE055"
+          : "#FFE055";
+      }
+    </script>
+  </body>
+</html>
